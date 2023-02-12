@@ -1,6 +1,10 @@
-# PhotonFusionSeminar03
+# What is this?
 
-Photon Fusion Seminar 03 Sample Project
+[Photon Fusion セミナー 第 3 回](https://photonjp.connpass.com/event/273406/)  
+で解説されているスクリプトコンポーネントとシーン一式です  
+以下の導入手順を行うと、オフラインゲームがオンライン化するシーンを確認することができます
+
+# How to Play
 
 本リポジトリをクローンしたら、Unity Hub 経由でクローンしたフォルダからプロジェクトを開きます  
 続いて次の
