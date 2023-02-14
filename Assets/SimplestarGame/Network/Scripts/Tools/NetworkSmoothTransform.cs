@@ -15,8 +15,9 @@ namespace SimplestarGame
         [Networked, HideInInspector]
         public Quaternion rotation { get; set; }
 
-        void Update()
+        public override void Render()
         {
+            base.Render();
             if (HasStateAuthority)
             {
                 this.position = this.transform.position;
