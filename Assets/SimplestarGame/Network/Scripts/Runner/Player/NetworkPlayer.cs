@@ -1,11 +1,12 @@
 using Fusion;
+using System;
 using UnityEngine;
 
 namespace SimplestarGame
 {
 	public struct PlayerInformation : INetworkStruct
 	{
-		public PlayerRef PlayerRef;
+		public int tokenHash;
 		public Vector3 Position;
 		public Quaternion Rotation;
 	}
@@ -61,7 +62,7 @@ namespace SimplestarGame
             {
 				rendererAgent = NetworkSceneContext.Instance.PlayerInput.agentTransform;
 			}
-			int colorIndex = this.Information.PlayerRef.PlayerId % this.playerColors.Length;
+			int colorIndex = Mathf.Abs(this.Information.tokenHash) % this.playerColors.Length;
 			var renderers = rendererAgent.GetComponentsInChildren<Renderer>();
 			foreach (var renderer in renderers)
 			{
@@ -84,8 +85,13 @@ namespace SimplestarGame
 
 		public override void Spawned()
 		{
-			this.name = "[Network]Player:" + Object.InputAuthority.PlayerId;
-			this.Information.PlayerRef = Object.InputAuthority;
+			if(Runner.IsServer)
+            {
+				var token = Runner.GetPlayerConnectionToken(Object.InputAuthority);
+				var guid = new Guid(token);
+				this.Information.tokenHash = guid.GetHashCode();
+			}
+			this.name = "[Network]Player:" + this.Information.tokenHash;
 			if (NetworkSceneContext.Instance.Game != null)
 			{
 				NetworkSceneContext.Instance.Game.Join(this);

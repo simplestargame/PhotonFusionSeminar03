@@ -6,11 +6,23 @@ namespace SimplestarGame
 {
 	public class NetworkPlayerAgent : NetworkBehaviour
 	{
-		public NetworkPlayer Owner { get; set; }
+        public NetworkPlayer Owner
+        {
+            get { return this.networkPlayer; }
+            set
+            {
+                this.networkPlayer = value;
+				if(null != value)
+                {
+					this.name = "[Network]PlayerAgent:" + this.networkPlayer.Information.tokenHash;
+				}
+            }
+        }
+        NetworkPlayer networkPlayer;
 
-		public override void Spawned()
+        public override void Spawned()
 		{
-			this.name = "[Network]PlayerAgent:" + Object.InputAuthority.PlayerId;
+			this.name = "[Network]PlayerAgent";
 			this.starterAssetsInputs = this.GetComponent<StarterAssetsInputs>();
 			if (null == this.mainCamera)
 			{
@@ -58,8 +70,12 @@ namespace SimplestarGame
 
         internal void ApplyInput(PlayerInput input)
         {
+			if (null == this.starterAssetsInputs || null == this.Owner)
+			{
+				return;
+			}
 			Vector2 move = input.move;
-			if (null != this.mainCamera && null != this.Owner)
+			if (null != this.mainCamera)
             {
 				move = Quaternion.Euler(0, 0, -this.Owner.StarterAssetsInputs.cameraEulerY + this.mainCamera.transform.rotation.eulerAngles.y) * move;
             }
