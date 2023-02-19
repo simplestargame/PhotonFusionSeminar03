@@ -48,8 +48,12 @@ namespace SimplestarGame
 			this.name = "[Network]Game";
 			NetworkSceneContext.Instance.Game = this;
 			Runner.AddCallbacks(NetworkSceneContext.Instance.PlayerInput);
-			this.SpawnSeesaws();
-			this.SpawnBall();
+            if (!NetworkGame.spawnedGameObjects)
+            {
+				NetworkGame.spawnedGameObjects = true;
+				this.SpawnSeesaws();
+				this.SpawnBall();
+			}
 			if (null != NetworkSceneContext.Instance.hostClientText)
 			{
 				NetworkSceneContext.Instance.hostClientText.text = Runner.IsServer ? "Host" : "Client";
@@ -127,5 +131,7 @@ namespace SimplestarGame
 			}
 			Runner.Despawn(agent.Object);
 		}
+
+		static bool spawnedGameObjects = false;
 	}
 }
